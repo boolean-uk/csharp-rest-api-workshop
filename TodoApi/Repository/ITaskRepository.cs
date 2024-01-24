@@ -11,5 +11,8 @@ namespace TodoApi.Repository
         public TaskItem? GetTask(int id);
 
         public TaskItem? UpdateTask(int id, TaskItemUpdatePayload updateData);
+
+        public bool DeleteTask(int id);
+
     }
 }

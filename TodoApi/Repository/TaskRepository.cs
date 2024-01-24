@@ -50,9 +50,14 @@ namespace TodoApi.Repository
                 hasUpdate = true;
             }
 
-            if(!hasUpdate) throw new Exception("No update data provided");
+            if(!hasUpdate) throw new Exception("No task update data provided");
 
             return task;
+        }
+
+        public bool DeleteTask(int id)
+        {
+            return _tasks.DeleteTask(id);
         }
 
     }
