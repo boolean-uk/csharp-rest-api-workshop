@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using TodoApi.Data;
 using TodoApi.Endpoints;
 using TodoApi.Model;
@@ -10,11 +11,16 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddDbContext<TaskContext>(opt =>
+{
+    opt.UseInMemoryDatabase("TaskList");
+});
+
 // this creates a single OBJECT of type TaskCollection
 // stores this object inside the App / Web Framework
 // whenever a request handler needs this object, it will be injected
 // this object lives throught the entire lifetime of the application
-builder.Services.AddSingleton<TaskCollection>();
+// builder.Services.AddSingleton<TaskCollection>();
 
 // this creates a new instance of TaskRepository for each request
 builder.Services.AddScoped<ITaskRepository, TaskRepository>();

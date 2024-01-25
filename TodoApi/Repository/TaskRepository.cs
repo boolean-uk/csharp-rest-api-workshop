@@ -5,32 +5,35 @@ namespace TodoApi.Repository
 {
     public class TaskRepository : ITaskRepository
     {
-        private TaskCollection _tasks;
+        private TaskContext _db;
 
-        public TaskRepository(TaskCollection tasks)
+        public TaskRepository(TaskContext db)
         {
-            _tasks = tasks;
+            _db = db;
         }
 
         public List<TaskItem> GetAllTasks()
         {
-            return _tasks.Tasks;
+            return _db.TaskItems.ToList();
         }
 
         public TaskItem AddTask(string taskTitle)
         {
-            return _tasks.AddTask(taskTitle);
+            var taskItem = new TaskItem() { Title = taskTitle, IsCompleted = false };
+            _db.Add(taskItem);
+            _db.SaveChanges();
+            return taskItem;
         }
 
         public TaskItem? GetTask(int id)
         {
-            return _tasks.GetTask(id);
+            return _db.TaskItems.FirstOrDefault(t => t.Id == id);
         }
 
         public TaskItem? UpdateTask(int id, TaskItemUpdatePayload updateData)
         {
             // check if task exists
-            var task = _tasks.GetTask(id);
+            var task = GetTask(id);
             if (task == null)
             {
                 return null;
@@ -52,12 +55,18 @@ namespace TodoApi.Repository
 
             if(!hasUpdate) throw new Exception("No task update data provided");
 
+            _db.SaveChanges();
+
             return task;
         }
 
         public bool DeleteTask(int id)
         {
-            return _tasks.DeleteTask(id);
+            var taskItem = GetTask(id);
+            if (taskItem == null) return false;
+            _db.TaskItems.Remove(taskItem);
+            _db.SaveChanges();
+            return true;
         }
 
     }

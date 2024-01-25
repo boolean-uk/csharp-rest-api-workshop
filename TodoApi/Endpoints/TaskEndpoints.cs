@@ -62,19 +62,13 @@ namespace TodoApi.Endpoints
             }
         }
 
-        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public static IResult DeleteTask(ITaskRepository tasks, int id)
         {
-            TaskItem? item = tasks.GetTask(id);
-            if (item == null)
-            {
-                return Results.NotFound($"Task with id {id} not found.");
-            }
             if(!tasks.DeleteTask(id))
             {
-                return Results.Problem("Failed to delete task.");
+                return Results.NotFound("Failed to delete task.");
             }
             return Results.NoContent();
         }
