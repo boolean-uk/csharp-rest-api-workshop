@@ -2,7 +2,7 @@
 
 namespace TodoApi.Repository
 {
-    public interface ITaskRepository
+    public interface IRepository
     {
         public List<TaskItem> GetAllTasks();
 
@@ -14,5 +14,6 @@ namespace TodoApi.Repository
 
         public bool DeleteTask(int id);
 
+        public ApplicationUser? GetUser(string email);
     }
 }

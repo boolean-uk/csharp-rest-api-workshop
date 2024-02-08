@@ -3,11 +3,11 @@ using TodoApi.Model;
 
 namespace TodoApi.Repository
 {
-    public class TaskRepository : ITaskRepository
+    public class Repository : IRepository
     {
         private TaskContext _db;
 
-        public TaskRepository(TaskContext db)
+        public Repository(TaskContext db)
         {
             _db = db;
         }
@@ -41,19 +41,19 @@ namespace TodoApi.Repository
 
             bool hasUpdate = false;
 
-            if(updateData.Title != null)
+            if (updateData.Title != null)
             {
                 task.Title = (string)updateData.Title;
                 hasUpdate = true;
             }
 
-            if(updateData.IsCompleted != null)
+            if (updateData.IsCompleted != null)
             {
                 task.IsCompleted = (bool)updateData.IsCompleted;
                 hasUpdate = true;
             }
 
-            if(!hasUpdate) throw new Exception("No task update data provided");
+            if (!hasUpdate) throw new Exception("No task update data provided");
 
             _db.SaveChanges();
 
@@ -67,6 +67,11 @@ namespace TodoApi.Repository
             _db.TaskItems.Remove(taskItem);
             _db.SaveChanges();
             return true;
+        }
+
+        public ApplicationUser? GetUser(string email)
+        {
+            return _db.Users.FirstOrDefault(u => u.Email == email);
         }
 
     }
