@@ -1,5 +1,7 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using TodoApi.Helpers;
 using TodoApi.Model;
 using TodoApi.Repository;
 
@@ -19,8 +21,9 @@ namespace TodoApi.Endpoints
 
         [ProducesResponseType(StatusCodes.Status200OK)]
         [Authorize()]
-        public static IResult GetAllTasks(IRepository repo)
+        public static IResult GetAllTasks(IRepository repo, ClaimsPrincipal user)
         {
+            var uid = user.UserId();
             return TypedResults.Ok(repo.GetAllTasks());
         }
 
